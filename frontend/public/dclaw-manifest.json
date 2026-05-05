@@ -1,6 +1,8 @@
 {
   "app_id": "learn",
   "name": "DClaw Learn",
+  "description": "Adaptive learning platform with AI-generated quizzes, personalized study plans, and course management.",
+  "tagline": "Adaptive learning that works",
   "version": "0.1.0",
   "category": "education",
   "icon": "/icons/learn.svg",
