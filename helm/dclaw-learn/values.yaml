@@ -6,7 +6,7 @@ frontend:
     repository: ghcr.io/dclawstack/dclaw-learn
     tag: latest
     pullPolicy: IfNotPresent
-  port: 3000
+  port: 3008
   resources:
     limits:
       cpu: 500m
@@ -37,7 +37,7 @@ backend:
       value: "redis://redis.dclaw-core.svc.cluster.local:6379/0"
 
 database:
-  enabled: true
+  enabled: false
   storage: 10Gi
   instances: 1
   resources:
@@ -49,11 +49,11 @@ database:
       cpu: 500m
 
 ingress:
-  enabled: true
+  enabled: false
   className: nginx
   host: learn.dclawstack.io
   tls:
-    enabled: true
+    enabled: false
     secretName: dclaw-learn-tls
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
