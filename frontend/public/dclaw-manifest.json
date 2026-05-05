@@ -1,0 +1,13 @@
+{
+  "app_id": "learn",
+  "name": "DClaw Learn",
+  "version": "0.1.0",
+  "category": "education",
+  "icon": "/icons/learn.svg",
+  "color": "#3B82F6",
+  "entrypoint": "/",
+  "api_base": "https://learn.dclawstack.io",
+  "permissions": ["read:courses", "write:courses", "read:quiz", "write:quiz", "read:study-plan", "write:study-plan"],
+  "requires_auth": true,
+  "billing_plan": "free"
+}
