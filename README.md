@@ -22,7 +22,7 @@ dclaw-learn/
 docker-compose up --build
 ```
 
-- Frontend: http://localhost:3005
+- Frontend: http://localhost:3008
 - Backend API: http://localhost:8093
 - API docs: http://localhost:8093/docs
 

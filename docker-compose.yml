@@ -27,7 +27,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://learn:learn@postgres:5432/dclaw_learn
       APP_ENV: development
       LOG_LEVEL: info
-      CORS_ORIGINS: http://localhost:3005
+      CORS_ORIGINS: http://localhost:3008
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,7 +40,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3005:3005"
+      - "3008:3008"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8093
     depends_on:

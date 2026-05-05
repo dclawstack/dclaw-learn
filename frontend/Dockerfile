@@ -15,9 +15,9 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 USER nextjs
-EXPOSE 3005
-ENV PORT=3005
+EXPOSE 3008
+ENV PORT=3008
 ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget -q --spider http://localhost:3005/ || exit 1
+    CMD wget -q --spider http://localhost:3008/ || exit 1
 CMD ["node", "server.js"]
