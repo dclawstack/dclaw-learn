@@ -125,4 +125,5 @@ export const api = {
       body: JSON.stringify(body),
     }),
   getHealth: () => fetchJson<{ status: string }>("/health"),
+  getDashboard: () => fetchJson<DashboardData>("/api/v1/learn/dashboard"),
 };

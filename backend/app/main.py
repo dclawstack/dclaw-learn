@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import Base, engine
-from app.routers import courses, health, quiz, study_plan
+from app.routers import courses, dashboard, health, quiz, study_plan
 from app.seed import seed_data
 
 
@@ -40,4 +40,5 @@ app.add_middleware(
 app.include_router(courses.router, prefix="/api/v1/learn")
 app.include_router(quiz.router, prefix="/api/v1/learn")
 app.include_router(study_plan.router, prefix="/api/v1/learn")
+app.include_router(dashboard.router, prefix="/api/v1/learn")
 app.include_router(health.router)

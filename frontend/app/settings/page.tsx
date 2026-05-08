@@ -18,8 +18,9 @@ export default function SettingsPage() {
             </label>
             <input
               type="text"
-              defaultValue="http://localhost:8093"
-              className="w-full rounded-lg border px-3 py-2 text-sm focus:border-learn-500 focus:outline-none"
+              defaultValue={process.env.NEXT_PUBLIC_API_URL || "http://localhost:8093"}
+              readOnly
+              className="w-full rounded-lg border bg-gray-50 px-3 py-2 text-sm text-gray-600 focus:outline-none"
             />
           </div>
           <div>

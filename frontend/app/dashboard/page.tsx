@@ -7,17 +7,22 @@ export default function DashboardPage() {
   const [enrolled, setEnrolled] = useState<Course[]>([]);
   const [streak, setStreak] = useState(0);
   const [hours, setHours] = useState(0);
+  const [completed, setCompleted] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const courses = await api.listCourses();
-        setEnrolled(courses.items.slice(0, 3));
-        setStreak(5);
-        setHours(12.5);
+        const data = await api.getDashboard();
+        setEnrolled(data.enrolled_courses.slice(0, 5));
+        setStreak(data.streak_days);
+        setHours(data.total_hours_studied);
+        setCompleted(data.total_courses_completed);
       } catch {
         setEnrolled([]);
+        setStreak(0);
+        setHours(0);
+        setCompleted(0);
       } finally {
         setLoading(false);
       }
@@ -29,7 +34,7 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-4xl">
       <h1 className="mb-6 text-2xl font-bold text-gray-900">Dashboard</h1>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
         <div className="rounded-xl border bg-white p-4">
           <div className="text-sm text-gray-500">Current Streak</div>
           <div className="text-3xl font-bold text-learn-600">{streak} days</div>
@@ -40,9 +45,11 @@ export default function DashboardPage() {
         </div>
         <div className="rounded-xl border bg-white p-4">
           <div className="text-sm text-gray-500">Courses Enrolled</div>
-          <div className="text-3xl font-bold text-learn-600">
-            {enrolled.length}
-          </div>
+          <div className="text-3xl font-bold text-learn-600">{enrolled.length}</div>
+        </div>
+        <div className="rounded-xl border bg-white p-4">
+          <div className="text-sm text-gray-500">Completed</div>
+          <div className="text-3xl font-bold text-learn-600">{completed}</div>
         </div>
       </div>
 

@@ -27,10 +27,10 @@ export default function CourseDetailPage() {
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (!course) return <p className="text-gray-500">Course not found.</p>;
 
-  const completedCount = 1;
   const totalLessons = course.lessons.length;
-  const progress =
-    totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
+  // TODO: wire to real user progress when auth is implemented
+  const completedCount = 0;
+  const progress = totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
 
   return (
     <div className="mx-auto max-w-3xl">
