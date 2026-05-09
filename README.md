@@ -70,3 +70,6 @@ See `.env.example` in both `frontend/` and `backend/`.
 ## License
 
 Proprietary — DClaw Stack
+
+## Contributors
+- SB 
