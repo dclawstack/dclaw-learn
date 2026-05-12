@@ -1,21 +1,31 @@
 # Troubleshooting
 
-Common issues and solutions for DClaw Learn.
+- [Common Issues](./common-issues.md) — startup failures, database errors, auth problems, quiz and cert issues
+- [FAQ](./faq.md) — frequently asked questions
 
-## Quick Diagnostics
+## Quick Diagnostics (Docker Compose)
 
 ```bash
-# Check app pods
-kubectl get pods -n dclaw-learn
+# Check all service status
+docker compose ps
 
-# Check logs
-kubectl logs -n dclaw-learn deployment/dclaw-learn-backend
+# Tail backend logs
+docker compose logs -f backend
 
-# Check database
-kubectl get clusters -n dclaw-learn
+# Tail frontend logs
+docker compose logs -f frontend
+
+# Check backend health
+curl http://localhost:8093/health
+
+# Connect to the database directly
+docker compose exec postgres psql -U learn -d dclaw_learn
 ```
 
-## Sections
+## Quick Diagnostics (Kubernetes)
 
-- [Common Issues](./common-issues)
-- [FAQ](./faq)
+```bash
+kubectl get pods -n dclaw-learn
+kubectl logs -n dclaw-learn deployment/dclaw-learn-backend
+kubectl get events -n dclaw-learn --sort-by='.lastTimestamp'
+```

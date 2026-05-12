@@ -5,6 +5,7 @@ import { api, type Course } from "@/lib/api";
 
 export default function DashboardPage() {
   const [enrolled, setEnrolled] = useState<Course[]>([]);
+  const [recommendations, setRecommendations] = useState<Course[]>([]);
   const [streak, setStreak] = useState(0);
   const [hours, setHours] = useState(0);
   const [completed, setCompleted] = useState(0);
@@ -18,11 +19,9 @@ export default function DashboardPage() {
         setStreak(data.streak_days);
         setHours(data.total_hours_studied);
         setCompleted(data.total_courses_completed);
+        setRecommendations(data.recommendations.slice(0, 4));
       } catch {
         setEnrolled([]);
-        setStreak(0);
-        setHours(0);
-        setCompleted(0);
       } finally {
         setLoading(false);
       }
@@ -53,9 +52,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <h2 className="mb-4 text-xl font-semibold text-gray-900">
-        Enrolled Courses
-      </h2>
+      <h2 className="mb-4 text-xl font-semibold text-gray-900">Enrolled Courses</h2>
       {loading ? (
         <p className="text-gray-500">Loading...</p>
       ) : enrolled.length === 0 ? (
@@ -66,7 +63,7 @@ export default function DashboardPage() {
           </a>
         </p>
       ) : (
-        <div className="grid gap-4">
+        <div className="mb-8 grid gap-4">
           {enrolled.map((course) => (
             <a
               key={course.id}
@@ -75,9 +72,7 @@ export default function DashboardPage() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-semibold text-gray-900">
-                    {course.title}
-                  </div>
+                  <div className="font-semibold text-gray-900">{course.title}</div>
                   <div className="text-sm text-gray-500">
                     {course.category} • {course.difficulty}
                   </div>
@@ -87,14 +82,35 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-gray-100">
-                <div
-                  className="h-2 rounded-full bg-learn-500"
-                  style={{ width: "30%" }}
-                />
+                <div className="h-2 rounded-full bg-learn-500" style={{ width: "0%" }} />
               </div>
             </a>
           ))}
         </div>
+      )}
+
+      {recommendations.length > 0 && (
+        <>
+          <h2 className="mb-4 text-xl font-semibold text-gray-900">Recommended for You</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {recommendations.map((course) => (
+              <a
+                key={course.id}
+                href={`/course/${course.id}`}
+                className="rounded-xl border bg-white p-4 hover:shadow-sm"
+              >
+                <div className="mb-1 text-xs font-medium uppercase tracking-wide text-learn-600">
+                  {course.category}
+                </div>
+                <div className="font-semibold text-gray-900">{course.title}</div>
+                <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                  <span className="rounded bg-gray-100 px-2 py-0.5">{course.difficulty}</span>
+                  <span>{course.estimated_hours}h</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

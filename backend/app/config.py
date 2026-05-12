@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "info"
     cors_origins: str = "http://localhost:3005"
+    jwt_secret: str = "change-me-in-production-use-a-long-random-string"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60 * 24 * 7  # 7 days
+    ollama_base_url: str = "http://localhost:11434"
 
     @property
     def cors_origin_list(self) -> list[str]:

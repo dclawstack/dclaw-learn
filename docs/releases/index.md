@@ -1,12 +1,6 @@
 # Releases
 
-Release notes for DClaw Learn.
+**Current version:** DClaw Learn v1.2.0
 
-## Current Version
-
-**DClaw Learn v0.1.0**
-
-## Sections
-
-- [Changelog](./changelog)
-- [Roadmap](./roadmap)
+- [Changelog](./changelog.md) — full history of what changed in each version
+- [Roadmap](./roadmap.md) — upcoming features by milestone

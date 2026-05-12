@@ -4,15 +4,54 @@ import uuid
 from datetime import datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
+
+# ── Auth ────────────────────────────────────────────────────────────────────
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    name: str = ""
+    password: str
+
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    email: str
+    name: str
+    role: str
+    created_at: datetime
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
+
+
+# ── Lessons ─────────────────────────────────────────────────────────────────
 
 class LessonSchema(BaseModel):
     id: uuid.UUID
     title: str
     order_index: int
     duration_minutes: int
+    video_url: str | None = None
+    video_duration: int | None = None
 
+
+class LessonCreate(BaseModel):
+    title: str
+    content: str = ""
+    order_index: int = 0
+    duration_minutes: int = 0
+    video_url: str | None = None
+    video_duration: int | None = None
+
+
+# ── Courses ─────────────────────────────────────────────────────────────────
 
 class CourseCreate(BaseModel):
     title: str
@@ -61,6 +100,30 @@ class EnrollResponse(BaseModel):
     status: str = "enrolled"
 
 
+# ── Progress ─────────────────────────────────────────────────────────────────
+
+class LessonCompleteResponse(BaseModel):
+    lesson_id: uuid.UUID
+    completed_lesson_ids: list[str]
+    completion_percentage: float
+    course_completed: bool
+
+
+class UserProgressResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    course_id: uuid.UUID
+    completed_lesson_ids: list[uuid.UUID]
+    overall_score: float
+    streak_days: int
+    enrolled_at: datetime
+    last_activity_at: datetime
+
+
+# ── Quiz ─────────────────────────────────────────────────────────────────────
+
 class QuizQuestion(BaseModel):
     question: str
     options: list[str]
@@ -89,6 +152,8 @@ class QuizResultResponse(BaseModel):
     percentage: float
     explanations: list[str]
 
+
+# ── Study Plan ───────────────────────────────────────────────────────────────
 
 class StudyPlanTask(BaseModel):
     day: int
@@ -127,18 +192,21 @@ class StudyPlanAdjustRequest(BaseModel):
     weeks: int | None = None
 
 
-class UserProgressResponse(BaseModel):
+# ── Certificates ─────────────────────────────────────────────────────────────
+
+class CertificateResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     user_id: uuid.UUID
     course_id: uuid.UUID
-    completed_lesson_ids: list[uuid.UUID]
-    overall_score: float
-    streak_days: int
-    enrolled_at: datetime
-    last_activity_at: datetime
+    certificate_number: str
+    issued_at: datetime
+    course_title: str = ""
+    user_name: str = ""
 
+
+# ── Dashboard ────────────────────────────────────────────────────────────────
 
 class DashboardResponse(BaseModel):
     enrolled_courses: list[CourseResponse]
@@ -146,3 +214,81 @@ class DashboardResponse(BaseModel):
     streak_days: int
     total_hours_studied: float
     recent_activity: list[dict[str, Any]]
+    recommendations: list[CourseResponse] = []
+
+
+# ── Forum ────────────────────────────────────────────────────────────────────
+
+class ThreadCreate(BaseModel):
+    title: str
+    body: str = ""
+
+
+class PostCreate(BaseModel):
+    body: str
+
+
+class PostResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    thread_id: uuid.UUID
+    user_id: uuid.UUID
+    body: str
+    created_at: datetime
+
+
+class ThreadResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    course_id: uuid.UUID
+    user_id: uuid.UUID
+    title: str
+    body: str
+    created_at: datetime
+    posts: list[PostResponse] = []
+
+
+# ── Assignments ───────────────────────────────────────────────────────────────
+
+class AssignmentCreate(BaseModel):
+    title: str
+    description: str = ""
+    due_date: datetime | None = None
+    max_score: int = 100
+
+
+class SubmissionCreate(BaseModel):
+    content: str
+
+
+class GradeSubmissionRequest(BaseModel):
+    score: int
+    feedback: str = ""
+
+
+class SubmissionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    assignment_id: uuid.UUID
+    user_id: uuid.UUID
+    content: str
+    score: int | None
+    feedback: str | None
+    submitted_at: datetime
+    graded_at: datetime | None
+
+
+class AssignmentResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    course_id: uuid.UUID
+    title: str
+    description: str
+    due_date: datetime | None
+    max_score: int
+    created_at: datetime
+    submissions: list[SubmissionResponse] = []

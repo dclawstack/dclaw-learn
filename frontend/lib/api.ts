@@ -1,16 +1,40 @@
+import { getToken } from "./auth";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  });
+  const token = getToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(init?.headers as Record<string, string>),
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const res = await fetch(`${API_BASE}${path}`, { ...init, headers });
   if (!res.ok) {
     const err = await res.text();
     throw new Error(err || `HTTP ${res.status}`);
   }
   return res.json() as Promise<T>;
 }
+
+// ── Auth types ───────────────────────────────────────────────────────────────
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  created_at: string;
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
+  user: AuthUser;
+}
+
+// ── Course types ─────────────────────────────────────────────────────────────
 
 export interface Course {
   id: string;
@@ -28,6 +52,8 @@ export interface Lesson {
   title: string;
   order_index: number;
   duration_minutes: number;
+  video_url: string | null;
+  video_duration: number | null;
 }
 
 export interface CourseDetail extends Course {
@@ -38,6 +64,8 @@ export interface CourseList {
   items: Course[];
   total: number;
 }
+
+// ── Quiz types ───────────────────────────────────────────────────────────────
 
 export interface QuizQuestion {
   question: string;
@@ -58,6 +86,8 @@ export interface QuizResult {
   percentage: number;
   explanations: string[];
 }
+
+// ── Study Plan types ─────────────────────────────────────────────────────────
 
 export interface StudyPlanTask {
   day: number;
@@ -81,15 +111,98 @@ export interface StudyPlan {
   updated_at: string;
 }
 
+// ── Dashboard types ──────────────────────────────────────────────────────────
+
 export interface DashboardData {
   enrolled_courses: Course[];
   total_courses_completed: number;
   streak_days: number;
   total_hours_studied: number;
   recent_activity: Array<Record<string, unknown>>;
+  recommendations: Course[];
 }
 
+// ── Certificate types ────────────────────────────────────────────────────────
+
+export interface Certificate {
+  id: string;
+  user_id: string;
+  course_id: string;
+  certificate_number: string;
+  issued_at: string;
+  course_title: string;
+  user_name: string;
+}
+
+// ── Progress types ───────────────────────────────────────────────────────────
+
+export interface LessonCompleteResult {
+  lesson_id: string;
+  completed_lesson_ids: string[];
+  completion_percentage: number;
+  course_completed: boolean;
+}
+
+// ── Forum types ──────────────────────────────────────────────────────────────
+
+export interface Post {
+  id: string;
+  thread_id: string;
+  user_id: string;
+  body: string;
+  created_at: string;
+}
+
+export interface Thread {
+  id: string;
+  course_id: string;
+  user_id: string;
+  title: string;
+  body: string;
+  created_at: string;
+  posts: Post[];
+}
+
+// ── Assignment types ─────────────────────────────────────────────────────────
+
+export interface Submission {
+  id: string;
+  assignment_id: string;
+  user_id: string;
+  content: string;
+  score: number | null;
+  feedback: string | null;
+  submitted_at: string;
+  graded_at: string | null;
+}
+
+export interface Assignment {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string;
+  due_date: string | null;
+  max_score: number;
+  created_at: string;
+  submissions: Submission[];
+}
+
+// ── API client ───────────────────────────────────────────────────────────────
+
 export const api = {
+  // Auth
+  register: (email: string, name: string, password: string) =>
+    fetchJson<AuthUser>("/api/v1/learn/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ email, name, password }),
+    }),
+  login: (email: string, password: string) =>
+    fetchJson<TokenResponse>("/api/v1/learn/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, name: "", password }),
+    }),
+
+  // Courses
   listCourses: (body?: Record<string, unknown>) =>
     fetchJson<CourseList>("/api/v1/learn/courses", {
       method: "POST",
@@ -102,6 +215,13 @@ export const api = {
       `/api/v1/learn/courses/${id}/enroll`,
       { method: "POST" }
     ),
+  completeLesson: (courseId: string, lessonId: string) =>
+    fetchJson<LessonCompleteResult>(
+      `/api/v1/learn/courses/${courseId}/lessons/${lessonId}/complete`,
+      { method: "POST" }
+    ),
+
+  // Quiz
   generateQuiz: (content: string, num_questions = 5) =>
     fetchJson<QuizGenerateResponse>("/api/v1/learn/quiz/generate", {
       method: "POST",
@@ -112,6 +232,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ answers }),
     }),
+
+  // Study plan
   createStudyPlan: (body: Record<string, unknown>) =>
     fetchJson<StudyPlan>("/api/v1/learn/study-plan", {
       method: "POST",
@@ -124,6 +246,51 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(body),
     }),
+
+  // Dashboard
   getHealth: () => fetchJson<{ status: string }>("/health"),
   getDashboard: () => fetchJson<DashboardData>("/api/v1/learn/dashboard"),
+
+  // Certificates
+  getCertificate: (courseId: string) =>
+    fetchJson<Certificate>(`/api/v1/learn/courses/${courseId}/certificate`),
+
+  // Recommendations
+  getRecommendations: () =>
+    fetchJson<CourseList>("/api/v1/learn/recommendations"),
+
+  // Forum
+  listThreads: (courseId: string) =>
+    fetchJson<Thread[]>(`/api/v1/learn/courses/${courseId}/forum`),
+  createThread: (courseId: string, title: string, body: string) =>
+    fetchJson<Thread>(`/api/v1/learn/courses/${courseId}/forum`, {
+      method: "POST",
+      body: JSON.stringify({ title, body }),
+    }),
+  getThread: (threadId: string) =>
+    fetchJson<Thread>(`/api/v1/learn/forum/${threadId}`),
+  replyToThread: (threadId: string, body: string) =>
+    fetchJson<Post>(`/api/v1/learn/forum/${threadId}/reply`, {
+      method: "POST",
+      body: JSON.stringify({ body }),
+    }),
+
+  // Assignments
+  listAssignments: (courseId: string) =>
+    fetchJson<Assignment[]>(`/api/v1/learn/courses/${courseId}/assignments`),
+  createAssignment: (courseId: string, data: Record<string, unknown>) =>
+    fetchJson<Assignment>(`/api/v1/learn/courses/${courseId}/assignments`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  submitAssignment: (assignmentId: string, content: string) =>
+    fetchJson<Submission>(`/api/v1/learn/assignments/${assignmentId}/submit`, {
+      method: "POST",
+      body: JSON.stringify({ content }),
+    }),
+  gradeSubmission: (submissionId: string, score: number, feedback: string) =>
+    fetchJson<Submission>(`/api/v1/learn/submissions/${submissionId}/grade`, {
+      method: "PATCH",
+      body: JSON.stringify({ score, feedback }),
+    }),
 };

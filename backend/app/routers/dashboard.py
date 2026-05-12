@@ -4,21 +4,23 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.auth import get_optional_user
 from app.database import get_db
-from app.models import Course, UserProgress
+from app.models import Course, User, UserProgress
 from app.schemas import CourseResponse, DashboardResponse
 
 router = APIRouter()
 
 
 @router.get("/dashboard", response_model=DashboardResponse)
-async def get_dashboard(db: AsyncSession = Depends(get_db)) -> DashboardResponse:
+async def get_dashboard(
+    db: AsyncSession = Depends(get_db),
+    current_user: User | None = Depends(get_optional_user),
+) -> DashboardResponse:
     """Return aggregate dashboard metrics from the database."""
-    # All courses
     courses_result = await db.execute(select(Course))
     courses = courses_result.scalars().all()
 
-    # User progress aggregates
     progress_result = await db.execute(
         select(
             func.count(UserProgress.id),
@@ -28,7 +30,6 @@ async def get_dashboard(db: AsyncSession = Depends(get_db)) -> DashboardResponse
     )
     total_enrollments, max_streak, total_score = progress_result.one_or_none() or (0, 0, 0.0)
 
-    # Total "hours studied" — sum estimated_hours for courses with at least one enrollment
     enrolled_course_ids_result = await db.execute(
         select(UserProgress.course_id).distinct()
     )
@@ -59,10 +60,32 @@ async def get_dashboard(db: AsyncSession = Depends(get_db)) -> DashboardResponse
                 }
             )
 
+    # Simple recommendations: courses not yet enrolled, same categories as user's courses
+    recommendations: list[CourseResponse] = []
+    if current_user:
+        user_progress_result = await db.execute(
+            select(UserProgress).where(UserProgress.user_id == current_user.id)
+        )
+        user_enrollments = user_progress_result.scalars().all()
+        enrolled_ids = {e.course_id for e in user_enrollments}
+
+        if enrolled_ids:
+            enrolled_cats_result = await db.execute(
+                select(Course.category).where(Course.id.in_(enrolled_ids)).distinct()
+            )
+            categories = [r[0] for r in enrolled_cats_result.all()]
+            rec_result = await db.execute(
+                select(Course)
+                .where(Course.id.notin_(enrolled_ids), Course.category.in_(categories))
+                .limit(4)
+            )
+            recommendations = [CourseResponse.model_validate(c) for c in rec_result.scalars().all()]
+
     return DashboardResponse(
         enrolled_courses=[CourseResponse.model_validate(c) for c in courses],
         total_courses_completed=total_enrollments,
         streak_days=max_streak,
         total_hours_studied=float(total_hours),
         recent_activity=recent_activity,
+        recommendations=recommendations,
     )
