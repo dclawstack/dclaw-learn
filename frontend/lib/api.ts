@@ -163,6 +163,92 @@ export interface Thread {
   posts: Post[];
 }
 
+// ── Flashcard types ───────────────────────────────────────────────────────────
+
+export interface FlashcardResponse {
+  id: string;
+  lesson_id: string;
+  user_id: string;
+  front: string;
+  back: string;
+  ease_factor: number;
+  interval_days: number;
+  review_count: number;
+  due_date: string;
+}
+
+export interface FlashcardReviewResponse {
+  id: string;
+  next_due_date: string;
+  interval_days: number;
+  ease_factor: number;
+}
+
+// ── Analytics types ───────────────────────────────────────────────────────────
+
+export interface CourseProgress {
+  course_id: string;
+  course_title: string;
+  completion_percentage: number;
+  avg_quiz_score: number | null;
+}
+
+export interface DailyActivity {
+  date: string;
+  lessons_completed: number;
+}
+
+export interface StudentAnalytics {
+  total_lessons_completed: number;
+  total_xp: number;
+  streak_days: number;
+  avg_quiz_score: number | null;
+  course_progress: CourseProgress[];
+  daily_activity: DailyActivity[];
+}
+
+// ── Rating types ─────────────────────────────────────────────────────────────
+
+export interface CourseRating {
+  id: string;
+  user_id: string;
+  course_id: string;
+  stars: number;
+  review: string;
+  created_at: string;
+}
+
+export interface CourseRatingSummary {
+  avg_rating: number;
+  rating_count: number;
+  ratings: CourseRating[];
+}
+
+// ── Search types ─────────────────────────────────────────────────────────────
+
+export interface CourseSearchResult {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  difficulty: string;
+  estimated_hours: number;
+}
+
+export interface LessonSearchResult {
+  id: string;
+  title: string;
+  course_id: string;
+  course_title: string;
+}
+
+export interface SearchResponse {
+  query: string;
+  courses: CourseSearchResult[];
+  lessons: LessonSearchResult[];
+  total: number;
+}
+
 // ── Assignment types ─────────────────────────────────────────────────────────
 
 export interface Submission {
@@ -292,5 +378,33 @@ export const api = {
     fetchJson<Submission>(`/api/v1/learn/submissions/${submissionId}/grade`, {
       method: "PATCH",
       body: JSON.stringify({ score, feedback }),
+    }),
+
+  // Search
+  search: (q: string) =>
+    fetchJson<SearchResponse>(`/api/v1/learn/search?q=${encodeURIComponent(q)}`),
+
+  // Flashcards
+  generateFlashcards: (lessonId: string) =>
+    fetchJson<FlashcardResponse[]>(`/api/v1/learn/lessons/${lessonId}/flashcards/generate`, { method: "POST" }),
+  reviewFlashcard: (cardId: string, quality: number) =>
+    fetchJson<FlashcardReviewResponse>(`/api/v1/learn/flashcards/${cardId}/review`, {
+      method: "POST",
+      body: JSON.stringify({ quality }),
+    }),
+  getDueFlashcards: () =>
+    fetchJson<FlashcardResponse[]>("/api/v1/learn/flashcards/due"),
+
+  // Analytics
+  getMyAnalytics: () =>
+    fetchJson<StudentAnalytics>("/api/v1/learn/analytics/me"),
+
+  // Ratings
+  getCourseRatings: (courseId: string) =>
+    fetchJson<CourseRatingSummary>(`/api/v1/learn/courses/${courseId}/ratings`),
+  rateCourse: (courseId: string, stars: number, review: string) =>
+    fetchJson<CourseRating>(`/api/v1/learn/courses/${courseId}/ratings`, {
+      method: "POST",
+      body: JSON.stringify({ stars, review }),
     }),
 };

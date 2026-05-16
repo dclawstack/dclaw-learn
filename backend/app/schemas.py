@@ -1,7 +1,7 @@
 """Pydantic v2 schemas for API requests and responses."""
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
@@ -29,6 +29,12 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
+
+
+class UserStatsResponse(BaseModel):
+    xp_total: int
+    streak_days: int
+    last_streak_date: date | None
 
 
 # ── Lessons ─────────────────────────────────────────────────────────────────
@@ -151,6 +157,18 @@ class QuizResultResponse(BaseModel):
     total: int
     percentage: float
     explanations: list[str]
+    attempt_id: uuid.UUID | None = None
+
+
+class QuizAttemptResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    quiz_id: uuid.UUID
+    user_id: uuid.UUID
+    score: float
+    answers: list[int]
+    taken_at: datetime
 
 
 # ── Study Plan ───────────────────────────────────────────────────────────────
@@ -252,6 +270,83 @@ class ThreadResponse(BaseModel):
 
 # ── Assignments ───────────────────────────────────────────────────────────────
 
+# ── Adaptive difficulty ───────────────────────────────────────────────────────
+
+class NextLessonResponse(BaseModel):
+    lesson_id: uuid.UUID | None
+    lesson_title: str | None
+    difficulty_adjustment: str  # "accelerated" | "remediation" | "normal"
+    mastery_score: float
+    message: str
+
+
+# ── Flashcards ────────────────────────────────────────────────────────────────
+
+class FlashcardResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    lesson_id: uuid.UUID
+    user_id: uuid.UUID
+    front: str
+    back: str
+    ease_factor: float
+    interval_days: int
+    review_count: int
+    due_date: datetime
+
+
+class FlashcardReviewRequest(BaseModel):
+    quality: int = Field(..., ge=0, le=5)
+
+
+class FlashcardReviewResponse(BaseModel):
+    id: uuid.UUID
+    next_due_date: datetime
+    interval_days: int
+    ease_factor: float
+
+
+# ── Instructor ───────────────────────────────────────────────────────────────
+
+class InstructorCourseStats(BaseModel):
+    course_id: uuid.UUID
+    course_title: str
+    enrollment_count: int
+    avg_rating: float
+
+
+class InstructorDashboardResponse(BaseModel):
+    courses: list[InstructorCourseStats]
+    total_students: int
+
+
+# ── Ratings ───────────────────────────────────────────────────────────────────
+
+class CourseRatingCreate(BaseModel):
+    stars: int = Field(..., ge=1, le=5)
+    review: str = ""
+
+
+class CourseRatingResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    course_id: uuid.UUID
+    stars: int
+    review: str
+    created_at: datetime
+
+
+class CourseRatingSummary(BaseModel):
+    avg_rating: float
+    rating_count: int
+    ratings: list[CourseRatingResponse]
+
+
+# ── Assignments ───────────────────────────────────────────────────────────────
+
 class AssignmentCreate(BaseModel):
     title: str
     description: str = ""
@@ -268,6 +363,14 @@ class GradeSubmissionRequest(BaseModel):
     feedback: str = ""
 
 
+class AiGradeFeedback(BaseModel):
+    score: int
+    feedback: str
+    strengths: list[str]
+    improvements: list[str]
+    graded_by: str = "ai"
+
+
 class SubmissionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -279,6 +382,7 @@ class SubmissionResponse(BaseModel):
     feedback: str | None
     submitted_at: datetime
     graded_at: datetime | None
+    graded_by: str | None = None
 
 
 class AssignmentResponse(BaseModel):

@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.auth import create_access_token, hash_password, verify_password
+from app.core.auth import create_access_token, get_current_user, hash_password, verify_password
 from app.database import get_db
 from app.models import User
-from app.schemas import TokenResponse, UserCreate, UserResponse
+from app.schemas import TokenResponse, UserCreate, UserResponse, UserStatsResponse
 
 router = APIRouter()
 
@@ -48,3 +48,15 @@ async def login(
         )
     token = create_access_token(user.id)
     return TokenResponse(access_token=token, user=UserResponse.model_validate(user))
+
+
+@router.get("/me/stats", response_model=UserStatsResponse)
+async def get_my_stats(
+    current_user: User = Depends(get_current_user),
+) -> UserStatsResponse:
+    """Return XP and streak stats for the current user."""
+    return UserStatsResponse(
+        xp_total=current_user.xp_total,
+        streak_days=current_user.streak_days,
+        last_streak_date=current_user.last_streak_date,
+    )
