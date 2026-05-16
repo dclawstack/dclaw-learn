@@ -1,13 +1,53 @@
 {
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/.claude/settings.local.json": {
+    "mtime": 1778926759.301533,
+    "ast_hash": "d80695b79e7b86c1c06f816b81d648e7",
+    "semantic_hash": "d80695b79e7b86c1c06f816b81d648e7"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_adaptive.py": {
+    "mtime": 1778926328.1599767,
+    "ast_hash": "02cae81be33534563fe55ad0e43152ef",
+    "semantic_hash": "02cae81be33534563fe55ad0e43152ef"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_analytics.py": {
+    "mtime": 1778925221.8386009,
+    "ast_hash": "ed84093e642fe32c29e8aff96b2172bd",
+    "semantic_hash": "ed84093e642fe32c29e8aff96b2172bd"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_quiz_history.py": {
+    "mtime": 1778924994.1972728,
+    "ast_hash": "b5762825f3f382acb17b8d2f78549d2d",
+    "semantic_hash": "b5762825f3f382acb17b8d2f78549d2d"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_ratings.py": {
+    "mtime": 1778924796.3957012,
+    "ast_hash": "36f6e45246578ec69471c53750894327",
+    "semantic_hash": "36f6e45246578ec69471c53750894327"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_health.py": {
     "mtime": 1778319517.3099427,
     "ast_hash": "f94170d86a29da644395917d7e1e988a",
     "semantic_hash": "f94170d86a29da644395917d7e1e988a"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_ai_grading.py": {
+    "mtime": 1778926174.1417403,
+    "ast_hash": "12400eee294ce08c8fb3127e1f2c005a",
+    "semantic_hash": "12400eee294ce08c8fb3127e1f2c005a"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_study_plan.py": {
+    "mtime": 1778926751.0052826,
+    "ast_hash": "595becb33d2af24d162325603e387c20",
+    "semantic_hash": "595becb33d2af24d162325603e387c20"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_dashboard.py": {
     "mtime": 1778319517.3099427,
     "ast_hash": "7f3e86b5c4562e6845cda46dbdfc3207",
     "semantic_hash": "7f3e86b5c4562e6845cda46dbdfc3207"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_search.py": {
+    "mtime": 1778924573.1254168,
+    "ast_hash": "27c0af765c51763784fdd724d5b97cd5",
+    "semantic_hash": "27c0af765c51763784fdd724d5b97cd5"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/conftest.py": {
     "mtime": 1778319517.3099427,
@@ -24,30 +64,50 @@
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_chat.py": {
+    "mtime": 1778925160.2049167,
+    "ast_hash": "f6e949eb732e4ea16eb35d2ee9a6633b",
+    "semantic_hash": "f6e949eb732e4ea16eb35d2ee9a6633b"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_streaks.py": {
+    "mtime": 1778924716.8326213,
+    "ast_hash": "e9919b6bc59870e2d63d8e2277a9b0e2",
+    "semantic_hash": "e9919b6bc59870e2d63d8e2277a9b0e2"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_flashcards.py": {
+    "mtime": 1778925117.0904171,
+    "ast_hash": "b5f3975aefca17ab877673a81db41497",
+    "semantic_hash": "b5f3975aefca17ab877673a81db41497"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/tests/test_instructor_auth.py": {
+    "mtime": 1778924920.14458,
+    "ast_hash": "3992a8705fa9015932b2a64344db8d3b",
+    "semantic_hash": "3992a8705fa9015932b2a64344db8d3b"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/database.py": {
     "mtime": 1778319517.308998,
     "ast_hash": "99e77a505568456ccee33351246e02c0",
     "semantic_hash": "99e77a505568456ccee33351246e02c0"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/config.py": {
-    "mtime": 1778481054.3246467,
+    "mtime": 1778923355.3533254,
     "ast_hash": "44bcc22262a9fbfbed8aaa325847d84f",
     "semantic_hash": "44bcc22262a9fbfbed8aaa325847d84f"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/main.py": {
-    "mtime": 1778481262.9030242,
-    "ast_hash": "690cecf2154866fc35bb1a4f3ea2e54e",
-    "semantic_hash": "690cecf2154866fc35bb1a4f3ea2e54e"
+    "mtime": 1778925206.4334633,
+    "ast_hash": "91bb230f5753d49e9eed5bd4bb42165d",
+    "semantic_hash": "91bb230f5753d49e9eed5bd4bb42165d"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/models.py": {
-    "mtime": 1778481020.9620657,
-    "ast_hash": "b4889d75efb8e0f2304ede134ff48cf1",
-    "semantic_hash": "b4889d75efb8e0f2304ede134ff48cf1"
+    "mtime": 1778926236.0268784,
+    "ast_hash": "e48260faf721fd6696a4b494b78a98a7",
+    "semantic_hash": "e48260faf721fd6696a4b494b78a98a7"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/schemas.py": {
-    "mtime": 1778481114.1305025,
-    "ast_hash": "a20f8f16fe5e20e254aa3ea65420f8e4",
-    "semantic_hash": "a20f8f16fe5e20e254aa3ea65420f8e4"
+    "mtime": 1778926266.011897,
+    "ast_hash": "f3cb7a4c2c44dfd3ba65531cd608e935",
+    "semantic_hash": "f3cb7a4c2c44dfd3ba65531cd608e935"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/__init__.py": {
     "mtime": 1778319517.3089082,
@@ -60,19 +120,24 @@
     "semantic_hash": "cefbb1684aa172d4d78c48d2e79937bd"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/courses.py": {
-    "mtime": 1778481155.507676,
-    "ast_hash": "7668081324bfddc5e48df7b99e699d85",
-    "semantic_hash": "7668081324bfddc5e48df7b99e699d85"
+    "mtime": 1778926294.1778448,
+    "ast_hash": "86b6489e1b9cdd1b21777222f9c40c98",
+    "semantic_hash": "86b6489e1b9cdd1b21777222f9c40c98"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/search.py": {
+    "mtime": 1778925278.7216249,
+    "ast_hash": "1c7cfdb1402a65e0a978f19e77a1541f",
+    "semantic_hash": "1c7cfdb1402a65e0a978f19e77a1541f"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/certificates.py": {
-    "mtime": 1778481195.2031488,
+    "mtime": 1778923355.356199,
     "ast_hash": "e210a2acffec5d19f16d94368de7a192",
     "semantic_hash": "e210a2acffec5d19f16d94368de7a192"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/study_plan.py": {
-    "mtime": 1778319517.309361,
-    "ast_hash": "ef1f3ba8e888223f71dbc6262d39c98a",
-    "semantic_hash": "ef1f3ba8e888223f71dbc6262d39c98a"
+    "mtime": 1778926206.8381877,
+    "ast_hash": "fd8e6bafedfedc9405501784188d970d",
+    "semantic_hash": "fd8e6bafedfedc9405501784188d970d"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/health.py": {
     "mtime": 1778319517.309361,
@@ -80,47 +145,67 @@
     "semantic_hash": "b1455b9b191174f2b2ee0478381b0e69"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/assignments.py": {
-    "mtime": 1778481231.1796043,
-    "ast_hash": "d7be6e4e9ee1c3db470b046a165dff73",
-    "semantic_hash": "d7be6e4e9ee1c3db470b046a165dff73"
+    "mtime": 1778926150.4249072,
+    "ast_hash": "24b42717881ad0cacfa6571197ff9739",
+    "semantic_hash": "24b42717881ad0cacfa6571197ff9739"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/dashboard.py": {
-    "mtime": 1778481250.193622,
+    "mtime": 1778923355.356719,
     "ast_hash": "1f8e662f6609db4f2b8d8413e0713410",
     "semantic_hash": "1f8e662f6609db4f2b8d8413e0713410"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/chat.py": {
+    "mtime": 1778925138.0261405,
+    "ast_hash": "173b7e847a78ea710d54683c1344585c",
+    "semantic_hash": "173b7e847a78ea710d54683c1344585c"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/forum.py": {
-    "mtime": 1778481218.2164376,
+    "mtime": 1778923355.3570993,
     "ast_hash": "6a44158c140f471188ae6cd895de774e",
     "semantic_hash": "6a44158c140f471188ae6cd895de774e"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/quiz.py": {
-    "mtime": 1778481181.9214764,
-    "ast_hash": "551a1250ec2437f6fc9956302738b06c",
-    "semantic_hash": "551a1250ec2437f6fc9956302738b06c"
+    "mtime": 1778926256.3490877,
+    "ast_hash": "475e2913c3a2342ea45bb0801695dad0",
+    "semantic_hash": "475e2913c3a2342ea45bb0801695dad0"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/flashcards.py": {
+    "mtime": 1778925274.6043427,
+    "ast_hash": "9ed196bf377ca3841e403ca9d1880308",
+    "semantic_hash": "9ed196bf377ca3841e403ca9d1880308"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/ratings.py": {
+    "mtime": 1778924748.2361002,
+    "ast_hash": "d7f7025a5334792688f7bcb9161bb5f0",
+    "semantic_hash": "d7f7025a5334792688f7bcb9161bb5f0"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/auth.py": {
-    "mtime": 1778481062.855722,
-    "ast_hash": "d835b6268ac517353367affc2e29adb9",
-    "semantic_hash": "d835b6268ac517353367affc2e29adb9"
+    "mtime": 1778924664.1128154,
+    "ast_hash": "c079a0365275339c84af7b590589065b",
+    "semantic_hash": "c079a0365275339c84af7b590589065b"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/__init__.py": {
     "mtime": 1778319517.308998,
     "ast_hash": "d47dc1b48cb42b64478b62bf85ff1bcb",
     "semantic_hash": "d47dc1b48cb42b64478b62bf85ff1bcb"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/analytics.py": {
+    "mtime": 1778925192.5384185,
+    "ast_hash": "e8674480995abfbe9fd387853fadc71e",
+    "semantic_hash": "e8674480995abfbe9fd387853fadc71e"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/routers/recommendations.py": {
-    "mtime": 1778481206.6162908,
+    "mtime": 1778923355.3570993,
     "ast_hash": "bd15c168726eada6709c69f19f22a588",
     "semantic_hash": "bd15c168726eada6709c69f19f22a588"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/core/auth.py": {
-    "mtime": 1778481044.584564,
-    "ast_hash": "ab83a312881aa01b5a83ed352c844b4c",
-    "semantic_hash": "ab83a312881aa01b5a83ed352c844b4c"
+    "mtime": 1778924826.8596253,
+    "ast_hash": "a3eadda5951df0cb249c5777d654c365",
+    "semantic_hash": "a3eadda5951df0cb249c5777d654c365"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/app/core/__init__.py": {
-    "mtime": 1778481037.5005057,
+    "mtime": 1778923355.3533254,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
@@ -140,14 +225,49 @@
     "semantic_hash": "71006b4804aa0347bcb1b2e6133614dc"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_11_0002_v1_2_features.py": {
-    "mtime": 1778481283.6033063,
+    "mtime": 1778923355.3520992,
     "ast_hash": "20f90f9bcebbb60ea73d1c76eb78f12c",
     "semantic_hash": "20f90f9bcebbb60ea73d1c76eb78f12c"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0004_v1_3_course_ratings.py": {
+    "mtime": 1778924772.1724646,
+    "ast_hash": "578201c4871b476aedbdd8dd96a1a518",
+    "semantic_hash": "578201c4871b476aedbdd8dd96a1a518"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0006_v1_3_quiz_attempts.py": {
+    "mtime": 1778924979.0307627,
+    "ast_hash": "5c9010c14bd02dfaa55f8b095ff10bc5",
+    "semantic_hash": "5c9010c14bd02dfaa55f8b095ff10bc5"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0007_v1_3_flashcards.py": {
+    "mtime": 1778925058.031292,
+    "ast_hash": "681c94188124a2d2da94c044a2dfc775",
+    "semantic_hash": "681c94188124a2d2da94c044a2dfc775"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0009_v1_3_mastery_score.py": {
+    "mtime": 1778926241.8570774,
+    "ast_hash": "a1cd45c3a94cb2cf53c5589918f805a5",
+    "semantic_hash": "a1cd45c3a94cb2cf53c5589918f805a5"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/__init__.py": {
     "mtime": 1778319517.3086858,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0005_v1_3_instructor_id.py": {
+    "mtime": 1778924884.1295295,
+    "ast_hash": "7077856bf49f27de6ba0657e4ba55c88",
+    "semantic_hash": "7077856bf49f27de6ba0657e4ba55c88"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0008_v1_3_graded_by.py": {
+    "mtime": 1778926156.375117,
+    "ast_hash": "13aec23543ef312e0279e0edb0c2dec7",
+    "semantic_hash": "13aec23543ef312e0279e0edb0c2dec7"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/backend/alembic/versions/2026_05_16_0003_v1_3_xp_streak.py": {
+    "mtime": 1778924701.145382,
+    "ast_hash": "a58d152caefb0710ebf1ec62fc71ac47",
+    "semantic_hash": "a58d152caefb0710ebf1ec62fc71ac47"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/deploy/vps-setup.sh": {
     "mtime": 1778319517.3102674,
@@ -195,7 +315,7 @@
     "semantic_hash": "06d56d7a16d30bb8d36dd45751617d56"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/layout.tsx": {
-    "mtime": 1778481368.152534,
+    "mtime": 1778923355.3677306,
     "ast_hash": "eba1b7e1ba8024607773216b1ab4f9b7",
     "semantic_hash": "eba1b7e1ba8024607773216b1ab4f9b7"
   },
@@ -205,17 +325,22 @@
     "semantic_hash": "d768208a0f253c8a2d33d9b801c359d0"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/NavBar.tsx": {
-    "mtime": 1778481377.5896552,
-    "ast_hash": "7890eed90998aa6342a8cb88e80b47e3",
-    "semantic_hash": "7890eed90998aa6342a8cb88e80b47e3"
+    "mtime": 1778926109.3854465,
+    "ast_hash": "e941f173e6ec85449b94ddbf04893d36",
+    "semantic_hash": "e941f173e6ec85449b94ddbf04893d36"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/settings/page.tsx": {
     "mtime": 1778319517.3118434,
     "ast_hash": "74f76c821b8d86f5a3e0c3e462361e84",
     "semantic_hash": "74f76c821b8d86f5a3e0c3e462361e84"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/analytics/page.tsx": {
+    "mtime": 1778925249.6806045,
+    "ast_hash": "31cc9602250624c77fdeee296d6fa93b",
+    "semantic_hash": "31cc9602250624c77fdeee296d6fa93b"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/course/[id]/page.tsx": {
-    "mtime": 1778481458.6885786,
+    "mtime": 1778923355.367432,
     "ast_hash": "caff903212e4cd84d2e96e2d4e04d709",
     "semantic_hash": "caff903212e4cd84d2e96e2d4e04d709"
   },
@@ -225,7 +350,7 @@
     "semantic_hash": "952d43e70eb054a5849e95cf9002bf43"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/login/page.tsx": {
-    "mtime": 1778481348.6782296,
+    "mtime": 1778923355.3680997,
     "ast_hash": "98a699ec7b4bb66c021e670ae4948770",
     "semantic_hash": "98a699ec7b4bb66c021e670ae4948770"
   },
@@ -239,15 +364,30 @@
     "ast_hash": "f22d825ad3e4e17b2537d28cd6256b66",
     "semantic_hash": "f22d825ad3e4e17b2537d28cd6256b66"
   },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/flashcards/page.tsx": {
+    "mtime": 1778926082.1944642,
+    "ast_hash": "2534edaced5a1ba7e5afae2ff4125eb4",
+    "semantic_hash": "2534edaced5a1ba7e5afae2ff4125eb4"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/search/page.tsx": {
+    "mtime": 1778926032.30463,
+    "ast_hash": "f0f66354eaa629911fcd00816f075600",
+    "semantic_hash": "f0f66354eaa629911fcd00816f075600"
+  },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/dashboard/page.tsx": {
-    "mtime": 1778481482.1115565,
+    "mtime": 1778923355.3677306,
     "ast_hash": "5684a27cb90e555b44ee17b335de4d2b",
     "semantic_hash": "5684a27cb90e555b44ee17b335de4d2b"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/register/page.tsx": {
-    "mtime": 1778481359.8673933,
+    "mtime": 1778923355.3689501,
     "ast_hash": "d635b25147a85093e7ac0781b00bff3c",
     "semantic_hash": "d635b25147a85093e7ac0781b00bff3c"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/app/instructor/page.tsx": {
+    "mtime": 1778926063.385329,
+    "ast_hash": "001ab991eac00e8f9646cb02ebfe674e",
+    "semantic_hash": "001ab991eac00e8f9646cb02ebfe674e"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/lib/utils.ts": {
     "mtime": 1778319517.3128986,
@@ -255,19 +395,24 @@
     "semantic_hash": "d9837f38cc05303254571985e3164050"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/lib/auth.ts": {
-    "mtime": 1778481295.6154728,
+    "mtime": 1778923355.3696244,
     "ast_hash": "95e1446d2a9b8149b8116cd0aa5803a3",
     "semantic_hash": "95e1446d2a9b8149b8116cd0aa5803a3"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/frontend/lib/api.ts": {
-    "mtime": 1778481336.8999524,
-    "ast_hash": "97dd409e18cdb96c99317090f36dd402",
-    "semantic_hash": "97dd409e18cdb96c99317090f36dd402"
+    "mtime": 1778926103.9252503,
+    "ast_hash": "1cb18a6c58ddd40e9198a84426e0f788",
+    "semantic_hash": "1cb18a6c58ddd40e9198a84426e0f788"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docker-compose.yml": {
     "mtime": 1778319517.3102674,
     "ast_hash": "06ad953ae19a80bf9123f4a91b8a694b",
     "semantic_hash": "06ad953ae19a80bf9123f4a91b8a694b"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/PLAN-v1.3.md": {
+    "mtime": 1778924518.560573,
+    "ast_hash": "d5a663500cf38ed1b183ba6afc72d2e1",
+    "semantic_hash": "d5a663500cf38ed1b183ba6afc72d2e1"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/README.md": {
     "mtime": 1778322850.685793,
@@ -280,9 +425,14 @@
     "semantic_hash": "7344551244170452343f957e1679feed"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/PLAN-v1.2.md": {
-    "mtime": 1778481518.526827,
+    "mtime": 1778923355.350472,
     "ast_hash": "28d59a35c33f4417a661d6d8878577b9",
     "semantic_hash": "28d59a35c33f4417a661d6d8878577b9"
+  },
+  "/home/siddharth/Desktop/dclaw/dclaw-learn/CLAUDE.md": {
+    "mtime": 1778923355.3501263,
+    "ast_hash": "fae7ade95f1f853b450675384a0f107c",
+    "semantic_hash": "fae7ade95f1f853b450675384a0f107c"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/.github/workflows/build-frontend.yml": {
     "mtime": 1778319517.307879,
@@ -340,92 +490,92 @@
     "semantic_hash": "e8c8e4fff48a4396819f1b616bea07f4"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/README.md": {
-    "mtime": 1778482180.4762223,
+    "mtime": 1778923355.3594708,
     "ast_hash": "ee5e1901e0cefdfc68b31ec4f624f83a",
     "semantic_hash": "ee5e1901e0cefdfc68b31ec4f624f83a"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/getting-started/installation.md": {
-    "mtime": 1778482204.906575,
+    "mtime": 1778923355.3600996,
     "ast_hash": "e0917bcbd522aa8700545a4892270971",
     "semantic_hash": "e0917bcbd522aa8700545a4892270971"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/getting-started/configuration.md": {
-    "mtime": 1778482219.438693,
+    "mtime": 1778923355.3599339,
     "ast_hash": "872fc986b7d00c3fc045bbb3c965ddc7",
     "semantic_hash": "872fc986b7d00c3fc045bbb3c965ddc7"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/getting-started/index.md": {
-    "mtime": 1778482193.225475,
+    "mtime": 1778923355.3599339,
     "ast_hash": "71e9c5c60d713c771079f13703fcbcd8",
     "semantic_hash": "71e9c5c60d713c771079f13703fcbcd8"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/getting-started/quickstart.md": {
-    "mtime": 1778482232.4794497,
+    "mtime": 1778923355.3600996,
     "ast_hash": "5643f82f9943ff7a7babc13232e414ec",
     "semantic_hash": "5643f82f9943ff7a7babc13232e414ec"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/releases/index.md": {
-    "mtime": 1778482390.6691747,
+    "mtime": 1778923355.3630996,
     "ast_hash": "2794621754007efc556a258a90d05320",
     "semantic_hash": "2794621754007efc556a258a90d05320"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/releases/changelog.md": {
-    "mtime": 1778482381.3085382,
+    "mtime": 1778923355.3630996,
     "ast_hash": "6c7fb72c19934d40cc836d875bcce292",
     "semantic_hash": "6c7fb72c19934d40cc836d875bcce292"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/releases/roadmap.md": {
-    "mtime": 1778482389.6602874,
+    "mtime": 1778923355.3640995,
     "ast_hash": "b2e62b74cbc41dacf67de6df4676e5c4",
     "semantic_hash": "b2e62b74cbc41dacf67de6df4676e5c4"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/troubleshooting/faq.md": {
-    "mtime": 1778482362.4140055,
+    "mtime": 1778923355.3640995,
     "ast_hash": "ff49ea914ecefc23db9af0a01c6bfbc3",
     "semantic_hash": "ff49ea914ecefc23db9af0a01c6bfbc3"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/troubleshooting/index.md": {
-    "mtime": 1778482303.7942681,
+    "mtime": 1778923355.366077,
     "ast_hash": "d223beac8e6a6dddb213c044a2bb87fb",
     "semantic_hash": "d223beac8e6a6dddb213c044a2bb87fb"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/troubleshooting/common-issues.md": {
-    "mtime": 1778482332.0994256,
+    "mtime": 1778923355.3640995,
     "ast_hash": "d08dfdb8d1e5bbbc31d8ddce067cd89c",
     "semantic_hash": "d08dfdb8d1e5bbbc31d8ddce067cd89c"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/reference/architecture.md": {
-    "mtime": 1778482259.088631,
+    "mtime": 1778923355.3620994,
     "ast_hash": "5ebec0206a8d1c5cafe83dce3ef6553c",
     "semantic_hash": "5ebec0206a8d1c5cafe83dce3ef6553c"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/reference/api.md": {
-    "mtime": 1778482294.7746708,
+    "mtime": 1778923355.3620994,
     "ast_hash": "32169b6e9433a9526de34e50dd1872a7",
     "semantic_hash": "32169b6e9433a9526de34e50dd1872a7"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/reference/stack.md": {
-    "mtime": 1778482269.4331357,
+    "mtime": 1778923355.3630996,
     "ast_hash": "67a38e0cce7ec8b3c64208c929ef8c19",
     "semantic_hash": "67a38e0cce7ec8b3c64208c929ef8c19"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/reference/index.md": {
-    "mtime": 1778482300.3194232,
+    "mtime": 1778923355.3620994,
     "ast_hash": "ea161633c8a2f5975267be80ae34bc87",
     "semantic_hash": "ea161633c8a2f5975267be80ae34bc87"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/guides/index.md": {
-    "mtime": 1778482396.9624386,
+    "mtime": 1778923355.3610995,
     "ast_hash": "18a314dede13c5379725d41606e6b30d",
     "semantic_hash": "18a314dede13c5379725d41606e6b30d"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/guides/best-practices.md": {
-    "mtime": 1778482432.5449488,
+    "mtime": 1778923355.3600996,
     "ast_hash": "cdbb2ca6f5a0b832a66c06055e91afd5",
     "semantic_hash": "cdbb2ca6f5a0b832a66c06055e91afd5"
   },
   "/home/siddharth/Desktop/dclaw/dclaw-learn/docs/guides/use-cases.md": {
-    "mtime": 1778482414.8549562,
+    "mtime": 1778923355.3610995,
     "ast_hash": "0cb64958879f2157e655895c94c6d8c2",
     "semantic_hash": "0cb64958879f2157e655895c94c6d8c2"
   }
