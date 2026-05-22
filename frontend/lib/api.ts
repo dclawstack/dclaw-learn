@@ -1,7 +1,5 @@
 import { getToken } from "./auth";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
-
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -10,7 +8,7 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers });
+  const res = await fetch(path, { ...init, headers });
   if (!res.ok) {
     const err = await res.text();
     throw new Error(err || `HTTP ${res.status}`);

@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8093";
 
 const nextConfig = {
   output: "standalone",
   images: { unoptimized: true },
   async rewrites() {
-    if (!API_BASE) return [];
     return [
       {
         source: "/api/v1/learn/:path*",
