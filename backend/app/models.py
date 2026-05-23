@@ -1,10 +1,10 @@
 """SQLAlchemy database models."""
 
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Any
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, Float
+from sqlalchemy import JSON, Boolean, Date, DateTime, ForeignKey, Integer, String, Text, Float
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -27,6 +27,9 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     hashed_password: Mapped[str] = mapped_column(Text, nullable=False)
     role: Mapped[str] = mapped_column(String(50), nullable=False, default="student")
+    xp_total: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    streak_days: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    last_streak_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
@@ -47,6 +50,9 @@ class Course(Base):
         UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
+    )
+    instructor_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=True
     )
     title: Mapped[str] = mapped_column(Text, nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -188,6 +194,7 @@ class UserProgress(Base):
         nullable=False,
         default=now_utc,
     )
+    mastery_score: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
 
     course: Mapped["Course"] = relationship(back_populates="enrollments")
 
@@ -355,6 +362,69 @@ class Assignment(Base):
     )
 
 
+class Flashcard(Base):
+    __tablename__ = "flashcards"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    lesson_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("lessons.id"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    front: Mapped[str] = mapped_column(Text, nullable=False)
+    back: Mapped[str] = mapped_column(Text, nullable=False)
+    ease_factor: Mapped[float] = mapped_column(Float, nullable=False, default=2.5)
+    interval_days: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    review_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    due_date: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=now_utc
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=now_utc
+    )
+
+    lesson: Mapped["Lesson"] = relationship(lazy="selectin")
+
+
+class QuizAttempt(Base):
+    __tablename__ = "quiz_attempts"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    quiz_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("quizzes.id"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    score: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    answers: Mapped[list[int]] = mapped_column(JSON, nullable=False, default=list)
+    taken_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=now_utc
+    )
+
+    quiz: Mapped["Quiz"] = relationship(lazy="selectin")
+
+
+class CourseRating(Base):
+    __tablename__ = "course_ratings"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("courses.id"), nullable=False
+    )
+    stars: Mapped[int] = mapped_column(Integer, nullable=False)
+    review: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=now_utc
+    )
+
+    course: Mapped["Course"] = relationship(lazy="selectin")
+
+
 class Submission(Base):
     __tablename__ = "submissions"
 
@@ -381,5 +451,6 @@ class Submission(Base):
         DateTime(timezone=True),
         nullable=True,
     )
+    graded_by: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     assignment: Mapped["Assignment"] = relationship(back_populates="submissions")

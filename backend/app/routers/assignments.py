@@ -1,22 +1,42 @@
 """Assignments and grading router."""
 
+import json
 import uuid
 from datetime import datetime, timezone
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.auth import get_current_user
+from app.config import settings
+from app.core.auth import get_current_user, require_instructor
 from app.database import get_db
 from app.models import Assignment, Course, Submission, User
 from app.schemas import (
+    AiGradeFeedback,
     AssignmentCreate,
     AssignmentResponse,
     GradeSubmissionRequest,
     SubmissionCreate,
     SubmissionResponse,
 )
+
+_AI_GRADE_PROMPT = """You are grading a student assignment.
+
+Assignment: {title}
+Instructions: {description}
+
+Student submission:
+{submission}
+
+Return ONLY valid JSON (no extra text) in this format:
+{{
+  "score": <integer 0-{max_score}>,
+  "feedback": "<overall feedback paragraph>",
+  "strengths": ["<strength 1>", "<strength 2>"],
+  "improvements": ["<improvement 1>", "<improvement 2>"]
+}}"""
 
 router = APIRouter()
 
@@ -41,7 +61,7 @@ async def create_assignment(
     course_id: uuid.UUID,
     request: AssignmentCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_instructor),
 ) -> AssignmentResponse:
     """Create an assignment (instructor action)."""
     course = await db.get(Course, course_id)
@@ -102,7 +122,7 @@ async def grade_submission(
     submission_id: uuid.UUID,
     request: GradeSubmissionRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_instructor),
 ) -> SubmissionResponse:
     """Grade a submission (instructor action)."""
     submission = await db.get(Submission, submission_id)
@@ -112,6 +132,72 @@ async def grade_submission(
     submission.score = request.score
     submission.feedback = request.feedback
     submission.graded_at = datetime.now(timezone.utc)
+    submission.graded_by = "instructor"
     await db.commit()
     await db.refresh(submission)
     return SubmissionResponse.model_validate(submission)
+
+
+@router.post("/submissions/{submission_id}/ai-grade", response_model=AiGradeFeedback)
+async def ai_grade_submission(
+    submission_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> AiGradeFeedback:
+    """Request AI feedback on a submission. Available to the submitter or instructors."""
+    submission = await db.get(Submission, submission_id)
+    if not submission:
+        raise HTTPException(status_code=404, detail="Submission not found")
+    if submission.user_id != current_user.id and current_user.role != "instructor":
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    assignment = await db.get(Assignment, submission.assignment_id)
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+
+    prompt = _AI_GRADE_PROMPT.format(
+        title=assignment.title,
+        description=assignment.description,
+        submission=submission.content[:3000],
+        max_score=assignment.max_score,
+    )
+
+    result: AiGradeFeedback | None = None
+    try:
+        async with httpx.AsyncClient(timeout=45.0) as client:
+            resp = await client.post(
+                f"{settings.ollama_base_url}/api/generate",
+                json={"model": "llama3", "prompt": prompt, "stream": False},
+            )
+            if resp.status_code == 200:
+                raw = resp.json().get("response", "")
+                start = raw.find("{")
+                end = raw.rfind("}") + 1
+                if start != -1 and end > 0:
+                    parsed = json.loads(raw[start:end])
+                    result = AiGradeFeedback(
+                        score=min(int(parsed.get("score", 0)), assignment.max_score),
+                        feedback=str(parsed.get("feedback", "")),
+                        strengths=[str(s) for s in parsed.get("strengths", [])],
+                        improvements=[str(s) for s in parsed.get("improvements", [])],
+                    )
+    except Exception:
+        pass
+
+    if result is None:
+        result = AiGradeFeedback(
+            score=0,
+            feedback="AI grading is currently unavailable. Please request instructor review.",
+            strengths=[],
+            improvements=["Ollama service is not reachable"],
+        )
+
+    # Persist the AI grade (does not overwrite a human grade)
+    if submission.graded_by != "instructor":
+        submission.score = result.score
+        submission.feedback = result.feedback
+        submission.graded_at = datetime.now(timezone.utc)
+        submission.graded_by = "ai"
+        await db.commit()
+
+    return result

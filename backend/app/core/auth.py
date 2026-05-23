@@ -68,3 +68,14 @@ async def get_optional_user(
     user: Annotated[User | None, Depends(_get_user_from_token)],
 ) -> User | None:
     return user
+
+
+async def require_instructor(
+    user: Annotated[User, Depends(get_current_user)],
+) -> User:
+    if user.role != "instructor":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Instructor role required",
+        )
+    return user

@@ -1,21 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { api, type StudyPlan, type StudyPlanTask } from "@/lib/api";
+import { useState } from 'react';
+import { api, type StudyPlan, type StudyPlanTask } from '@/lib/api';
+import { HeroSection } from '../components/landing/HeroSection';
+import { FeatureSection } from '../components/landing/FeatureSection';
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 export default function StudyPlanPage() {
-  const [title, setTitle] = useState("");
-  const [goal, setGoal] = useState("");
-  const [pace, setPace] = useState<"relaxed" | "moderate" | "intense">(
-    "moderate"
-  );
+  const [title, setTitle] = useState('');
+  const [goal, setGoal] = useState('');
+  const [pace, setPace] = useState<'relaxed' | 'moderate' | 'intense'>('moderate');
   const [weeks, setWeeks] = useState(4);
   const [plan, setPlan] = useState<StudyPlan | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,15 +21,10 @@ export default function StudyPlanPage() {
     if (!title.trim() || !goal.trim()) return;
     setLoading(true);
     try {
-      const res = await api.createStudyPlan({
-        title,
-        goal,
-        pace,
-        weeks,
-      });
+      const res = await api.createStudyPlan({ title, goal, pace, weeks });
       setPlan(res);
     } catch {
-      alert("Failed to create study plan");
+      alert('Failed to create study plan');
     } finally {
       setLoading(false);
     }
@@ -42,142 +34,173 @@ export default function StudyPlanPage() {
     if (!plan) return;
     setLoading(true);
     try {
-      const res = await api.adjustStudyPlan(plan.id, {
-        pace: newPace,
-        weeks: newWeeks,
-      });
+      const res = await api.adjustStudyPlan(plan.id, { pace: newPace, weeks: newWeeks });
       setPlan(res);
     } catch {
-      alert("Failed to adjust plan");
+      alert('Failed to adjust plan');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">Study Plan</h1>
+    <>
+      <HeroSection
+        headline="Your personal learning roadmap."
+        subheadline="AI generates a day-by-day schedule tailored to your goals, pace, and available time. Adapt it anytime."
+        ctas={[{ label: 'Create a Plan', href: '#planner' }]}
+      />
 
-      {!plan && (
-        <div className="rounded-xl border bg-white p-4">
-          <div className="mb-3">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Plan Title
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Learn Python in 4 weeks"
-              className="w-full rounded-lg border px-3 py-2 text-sm focus:border-learn-500 focus:outline-none"
-            />
-          </div>
-          <div className="mb-3">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Goal
-            </label>
-            <input
-              type="text"
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              placeholder="e.g. Build a web scraper"
-              className="w-full rounded-lg border px-3 py-2 text-sm focus:border-learn-500 focus:outline-none"
-            />
-          </div>
-          <div className="mb-3 flex gap-3">
-            <div className="flex-1">
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                Pace
-              </label>
-              <select
-                value={pace}
-                onChange={(e) =>
-                  setPace(e.target.value as "relaxed" | "moderate" | "intense")
-                }
-                className="w-full rounded-lg border px-3 py-2 text-sm focus:border-learn-500 focus:outline-none"
-              >
-                <option value="relaxed">Relaxed</option>
-                <option value="moderate">Moderate</option>
-                <option value="intense">Intense</option>
-              </select>
-            </div>
-            <div className="flex-1">
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                Weeks
-              </label>
-              <input
-                type="number"
-                min={1}
-                max={52}
-                value={weeks}
-                onChange={(e) => setWeeks(Number(e.target.value))}
-                className="w-full rounded-lg border px-3 py-2 text-sm focus:border-learn-500 focus:outline-none"
-              />
+      <FeatureSection
+        headline="AI-generated personalized schedules"
+        bullets={[
+          'Tell the AI your learning goal and preferred pace',
+          'Get a structured day-by-day plan generated instantly',
+          'Each session is sized to fit your available time',
+        ]}
+        mockup={
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl">
+            <div className="mb-3 font-semibold text-[var(--text)]">Python in 4 Weeks</div>
+            <div className="space-y-2">
+              {['Day 1 — Variables & Types (30 min)', 'Day 2 — Control Flow (45 min)', 'Day 3 — Functions (45 min)', 'Day 4 — Lists & Dicts (30 min)'].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                  <span className="h-2 w-2 rounded-full bg-[#3b82f6]" />
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
-          <button
-            onClick={create}
-            disabled={loading || !title.trim() || !goal.trim()}
-            className="rounded-lg bg-learn-600 px-4 py-2 text-sm text-white hover:bg-learn-700 disabled:opacity-50"
-          >
-            {loading ? "Creating..." : "Create Plan"}
-          </button>
-        </div>
-      )}
+        }
+      />
 
-      {plan && (
-        <div>
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <div className="text-xl font-semibold text-gray-900">
-                {plan.title}
-              </div>
-              <div className="text-sm text-gray-500">{plan.goal}</div>
-            </div>
+      <FeatureSection
+        headline="Adapt on the fly"
+        bullets={[
+          'Switch between relaxed, moderate, and intense pace',
+          'Extend or shorten the duration at any time',
+          'Completed tasks are preserved when you adjust',
+        ]}
+        mockup={
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl">
+            <div className="mb-3 font-semibold text-[var(--text)]">Adjust Plan</div>
             <div className="flex gap-2">
-              <select
-                value={plan.pace}
-                onChange={(e) => adjust(e.target.value)}
-                className="rounded-lg border px-3 py-1.5 text-sm focus:border-learn-500 focus:outline-none"
-              >
-                <option value="relaxed">Relaxed</option>
-                <option value="moderate">Moderate</option>
-                <option value="intense">Intense</option>
-              </select>
+              {['Relaxed', 'Moderate', 'Intense'].map((p) => (
+                <div key={p} className={`rounded-lg border px-3 py-2 text-sm ${p === 'Moderate' ? 'border-[#3b82f6] bg-blue-50 text-[#3b82f6] dark:bg-blue-900/30' : 'border-[var(--border)] text-[var(--text-muted)]'}`}>{p}</div>
+              ))}
             </div>
           </div>
+        }
+        reversed
+      />
 
-          <div className="mb-4 grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-500">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-              <div key={d}>{d}</div>
-            ))}
-          </div>
+      {/* Plan creator */}
+      <section id="planner" className="px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-6 text-2xl font-bold text-[var(--text)]">Study Plan</h2>
 
-          <div className="space-y-4">
-            {plan.daily_tasks.map((task: StudyPlanTask) => (
-              <div
-                key={task.day}
-                className="flex items-center gap-3 rounded-xl border bg-white p-3"
-              >
+          {!plan && (
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+              <div className="mb-3">
+                <label className="mb-1 block text-sm font-medium text-[var(--text)]">Plan Title</label>
                 <input
-                  type="checkbox"
-                  checked={task.completed}
-                  readOnly
-                  className="h-4 w-4 rounded text-learn-600"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g. Learn Python in 4 weeks"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[#3b82f6] focus:outline-none"
                 />
+              </div>
+              <div className="mb-3">
+                <label className="mb-1 block text-sm font-medium text-[var(--text)]">Goal</label>
+                <input
+                  type="text"
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  placeholder="e.g. Build a web scraper"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[#3b82f6] focus:outline-none"
+                />
+              </div>
+              <div className="mb-3 flex gap-3">
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-gray-900">
-                    {task.task}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Day {task.day} • {formatDate(task.date)}
-                  </div>
+                  <label className="mb-1 block text-sm font-medium text-[var(--text)]">Pace</label>
+                  <select
+                    value={pace}
+                    onChange={(e) => setPace(e.target.value as 'relaxed' | 'moderate' | 'intense')}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[#3b82f6] focus:outline-none"
+                  >
+                    <option value="relaxed">Relaxed</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="intense">Intense</option>
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <label className="mb-1 block text-sm font-medium text-[var(--text)]">Weeks</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={52}
+                    value={weeks}
+                    onChange={(e) => setWeeks(Number(e.target.value))}
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[#3b82f6] focus:outline-none"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={create}
+                disabled={loading || !title.trim() || !goal.trim()}
+                className="rounded-lg bg-[#3b82f6] px-4 py-2 text-sm text-white hover:bg-[#2563eb] disabled:opacity-50"
+              >
+                {loading ? 'Creating...' : 'Create Plan'}
+              </button>
+            </div>
+          )}
+
+          {plan && (
+            <div>
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <div className="text-xl font-semibold text-[var(--text)]">{plan.title}</div>
+                  <div className="text-sm text-[var(--text-muted)]">{plan.goal}</div>
+                </div>
+                <div className="flex gap-2">
+                  <select
+                    value={plan.pace}
+                    onChange={(e) => adjust(e.target.value)}
+                    className="rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-1.5 text-sm text-[var(--text)] focus:border-[#3b82f6] focus:outline-none"
+                  >
+                    <option value="relaxed">Relaxed</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="intense">Intense</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="mb-4 grid grid-cols-7 gap-1 text-center text-xs font-medium text-[var(--text-muted)]">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+                  <div key={d}>{d}</div>
+                ))}
+              </div>
+
+              <div className="space-y-4">
+                {plan.daily_tasks.map((task: StudyPlanTask) => (
+                  <div key={task.day} className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3">
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      readOnly
+                      className="h-4 w-4 rounded text-[#3b82f6]"
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-[var(--text)]">{task.task}</div>
+                      <div className="text-xs text-[var(--text-muted)]">Day {task.day} • {formatDate(task.date)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </section>
+    </>
   );
 }

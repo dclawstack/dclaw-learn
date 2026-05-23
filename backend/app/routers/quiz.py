@@ -7,10 +7,14 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sqlalchemy import select
+
 from app.config import settings
+from app.core.auth import get_optional_user
 from app.database import get_db
-from app.models import Quiz
+from app.models import Quiz, QuizAttempt, User, UserProgress
 from app.schemas import (
+    QuizAttemptResponse,
     QuizGenerateRequest,
     QuizGenerateResponse,
     QuizQuestion,
@@ -120,6 +124,7 @@ async def submit_quiz(
     quiz_id: uuid.UUID,
     request: QuizSubmitRequest,
     db: AsyncSession = Depends(get_db),
+    current_user: User | None = Depends(get_optional_user),
 ) -> QuizResultResponse:
     """Submit quiz answers and return results."""
     quiz = await db.get(Quiz, quiz_id)
@@ -139,9 +144,69 @@ async def submit_quiz(
             explanations.append(f"Incorrect. {question.get('explanation', '')}")
 
     percentage = (score / total * 100) if total > 0 else 0.0
+
+    attempt_id = None
+    if current_user:
+        attempt = QuizAttempt(
+            quiz_id=quiz_id,
+            user_id=current_user.id,
+            score=percentage,
+            answers=request.answers,
+        )
+        db.add(attempt)
+        await db.flush()
+        attempt_id = attempt.id
+
+        # Update mastery_score on the relevant UserProgress (course linked to quiz)
+        if quiz.course_id:
+            progress_result = await db.execute(
+                select(UserProgress).where(
+                    UserProgress.user_id == current_user.id,
+                    UserProgress.course_id == quiz.course_id,
+                )
+            )
+            progress = progress_result.scalar_one_or_none()
+            if progress:
+                # Rolling average of last 3 attempts for this quiz
+                attempts_result = await db.execute(
+                    select(QuizAttempt)
+                    .where(
+                        QuizAttempt.quiz_id == quiz_id,
+                        QuizAttempt.user_id == current_user.id,
+                    )
+                    .order_by(QuizAttempt.taken_at.desc())
+                    .limit(3)
+                )
+                recent = attempts_result.scalars().all()
+                if recent:
+                    progress.mastery_score = sum(a.score for a in recent) / len(recent) / 100.0
+
+        await db.commit()
+        await db.refresh(attempt)
+        attempt_id = attempt.id
+
     return QuizResultResponse(
         score=score,
         total=total,
         percentage=percentage,
         explanations=explanations,
+        attempt_id=attempt_id,
     )
+
+
+@router.get("/quiz/{quiz_id}/history", response_model=list[QuizAttemptResponse])
+async def get_quiz_history(
+    quiz_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User | None = Depends(get_optional_user),
+) -> list[QuizAttemptResponse]:
+    """Return all past attempts for a quiz by the current user."""
+    if not current_user:
+        return []
+    from sqlalchemy import select
+    result = await db.execute(
+        select(QuizAttempt)
+        .where(QuizAttempt.quiz_id == quiz_id, QuizAttempt.user_id == current_user.id)
+        .order_by(QuizAttempt.taken_at)
+    )
+    return [QuizAttemptResponse.model_validate(a) for a in result.scalars().all()]
