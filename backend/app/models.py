@@ -77,6 +77,8 @@ class Course(Base):
     lessons: Mapped[list["Lesson"]] = relationship(
         back_populates="course",
         cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by="Lesson.order_index",
     )
     enrollments: Mapped[list["UserProgress"]] = relationship(
         back_populates="course",

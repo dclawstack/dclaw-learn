@@ -1,6 +1,6 @@
 """Study plan router tests — LLM path (mocked) and fallback path."""
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from httpx import AsyncClient
@@ -52,7 +52,10 @@ async def test_study_plan_llm_path(client: AsyncClient, db_session: AsyncSession
 
     mock_resp = AsyncMock()
     mock_resp.status_code = 200
-    mock_resp.json = AsyncMock(return_value={"response": llm_response})
+    # httpx Response.json() is synchronous, so the mock must return the dict
+    # directly (not a coroutine) — otherwise the router's resp.json().get(...)
+    # raises and the LLM path silently falls back to the heuristic plan.
+    mock_resp.json = MagicMock(return_value={"response": llm_response})
 
     with patch("app.routers.study_plan.httpx.AsyncClient") as mock_cls:
         mock_c = AsyncMock()

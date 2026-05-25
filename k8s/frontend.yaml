@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dclaw-learn-frontend
+  namespace: dclaw-core
+  labels:
+    app.kubernetes.io/name: dclaw-learn
+    app.kubernetes.io/part-of: dclaw-platform
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dclaw-learn
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dclaw-learn
+        app.kubernetes.io/part-of: dclaw-platform
+        app.kubernetes.io/component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: docker.io/library/dclaw-learn-frontend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3046
+              name: http
+          env:
+            - name: PORT
+              value: "3046"
+            # Server-side rewrite target for /api/* and /health/* (next.config.js).
+            - name: BACKEND_URL
+              value: "http://dclaw-learn-backend:8093"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dclaw-learn
+  namespace: dclaw-core
+  labels:
+    app.kubernetes.io/name: dclaw-learn
+    app.kubernetes.io/part-of: dclaw-platform
+    app.kubernetes.io/component: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 3046
+      targetPort: http
+      nodePort: 30046
+      name: http
+  selector:
+    app.kubernetes.io/name: dclaw-learn

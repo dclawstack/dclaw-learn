@@ -1,18 +1,25 @@
 /** @type {import('next').NextConfig} */
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8093";
+// Server-side proxy target. In-cluster this points at the backend Service.
+// The browser always uses relative URLs (NEXT_PUBLIC_API_URL is kept empty).
+const BACKEND_URL = process.env.BACKEND_URL || "http://dclaw-learn-backend:8093";
 
 const nextConfig = {
   output: "standalone",
+  skipTrailingSlashRedirect: true,
   images: { unoptimized: true },
   async rewrites() {
     return [
       {
-        source: "/api/v1/learn/:path*",
-        destination: `${API_BASE}/api/v1/learn/:path*`,
+        source: "/api/:path*",
+        destination: `${BACKEND_URL}/api/:path*`,
+      },
+      {
+        source: "/health/:path*",
+        destination: `${BACKEND_URL}/health/:path*`,
       },
       {
         source: "/health",
-        destination: `${API_BASE}/health`,
+        destination: `${BACKEND_URL}/health`,
       },
     ];
   },

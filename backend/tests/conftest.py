@@ -1,9 +1,8 @@
 """Pytest configuration and shared fixtures."""
 
-import asyncio
+import os
 from collections.abc import AsyncGenerator
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -12,20 +11,15 @@ from sqlalchemy.orm import sessionmaker
 from app.database import Base, get_db
 from app.main import app
 
-TEST_DATABASE_URL = "postgresql+asyncpg://learn:learn@localhost:5432/dclaw_learn_test"
+TEST_DATABASE_URL = os.environ.get(
+    "TEST_DATABASE_URL",
+    "postgresql+asyncpg://learn:learn@localhost:5432/dclaw_learn_test",
+)
 
 engine = create_async_engine(TEST_DATABASE_URL, echo=False, pool_pre_ping=True)
 AsyncTestingSessionLocal = sessionmaker(
     bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
 )
-
-
-@pytest_asyncio.fixture(scope="session")
-def event_loop():
-    """Create an instance of the default event loop for the test session."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
@@ -41,14 +35,33 @@ async def setup_database() -> AsyncGenerator[None, None]:
 
 @pytest_asyncio.fixture
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
-    """Yield a fresh database session for each test."""
-    async with AsyncTestingSessionLocal() as session:
+    """Yield a session bound to a transaction that is rolled back after each test.
+
+    The session runs inside an outer transaction on a dedicated connection so
+    every test starts from a clean database, regardless of commits made during
+    the test (the rollback discards them).
+    """
+    connection = await engine.connect()
+    transaction = await connection.begin()
+    # create_savepoint: the session's commit()/rollback() act on SAVEPOINTs
+    # nested inside the outer transaction, so endpoint commits don't escape it.
+    session = AsyncSession(
+        bind=connection,
+        expire_on_commit=False,
+        join_transaction_mode="create_savepoint",
+    )
+    try:
         yield session
+    finally:
+        await session.close()
+        if transaction.is_active:
+            await transaction.rollback()
+        await connection.close()
 
 
 @pytest_asyncio.fixture
 async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
-    """Yield an HTTP client with overridden DB dependency."""
+    """Yield an HTTP client whose requests share the test's rolled-back session."""
 
     async def _override_get_db() -> AsyncGenerator[AsyncSession, None]:
         yield db_session

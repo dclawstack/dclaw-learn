@@ -1,0 +1,23 @@
+# dpanel app-registry entry for DClaw Learn.
+#
+# The live `dclaw-apps-registry` ConfigMap in dclaw-core holds one JSON key
+# per enabled app. To enable WITHOUT clobbering the other apps' keys, apply
+# this as a merge patch (a full `kubectl apply` of a ConfigMap would drop
+# keys not present here):
+#
+#   kubectl patch configmap dclaw-apps-registry -n dclaw-core --type merge \
+#     -p '{"data":{"learn":"<single-line JSON below>"}}'
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dclaw-apps-registry
+  namespace: dclaw-core
+  labels:
+    managed-by: dclaw-operator
+    component: dpanel-registry
+    app.kubernetes.io/name: dclaw-apps-registry
+    app.kubernetes.io/part-of: dclaw-platform
+data:
+  learn: |
+    {"appId":"learn","appName":"DClaw Learn","appIcon":"GraduationCap","category":"Education","version":"0.1.0","primaryColor":"#0EA5E9","path":"/app/learn","tier":"free","status":"ready","url":"http://localhost:30046"}

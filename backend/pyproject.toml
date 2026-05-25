@@ -14,6 +14,8 @@ dependencies = [
     "fastapi>=0.111.0",
     "uvicorn[standard]>=0.30.0",
     "pydantic>=2.7.0",
+    # required by pydantic EmailStr fields used in app/schemas.py
+    "email-validator>=2.0.0",
     "pydantic-settings>=2.2.0",
     "sqlalchemy[asyncio]>=2.0.30",
     "asyncpg>=0.29.0",
@@ -21,7 +23,11 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "httpx>=0.27.0",
     "python-jose[cryptography]>=3.3.0",
-    "passlib[bcrypt]>=1.7.4",
+    "passlib>=1.7.4",
+    # bcrypt pinned <4.1: passlib 1.7.4 reads bcrypt.__about__.__version__,
+    # which bcrypt 4.1+/5.x removed, breaking passlib's backend (raises
+    # "password cannot be longer than 72 bytes" on every hash).
+    "bcrypt>=4.0,<4.1",
     "python-multipart>=0.0.9",
 ]
 
@@ -42,6 +48,10 @@ select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# Run tests and async fixtures on a single session-scoped event loop so they
+# share the module-level async engine (avoids "attached to a different loop").
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
 testpaths = ["tests"]
 
 [tool.mypy]

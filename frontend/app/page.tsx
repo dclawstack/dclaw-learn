@@ -3,6 +3,7 @@ import { HeroSection } from './components/landing/HeroSection';
 import { FeatureSection } from './components/landing/FeatureSection';
 import { FeatureGrid } from './components/landing/FeatureGrid';
 import { SeedWidget } from './components/SeedWidget';
+import { SeedControls } from './components/SeedControls';
 
 const FEATURE_CARDS = [
   {
@@ -173,6 +174,10 @@ export default function HomePage() {
           </div>
         }
       />
+
+      {/* ─── DEMO CONTROLS (remove this block + SeedControls.tsx + backend demo router to disable) ─── */}
+      <SeedControls />
+      {/* ─── END DEMO CONTROLS ─── */}
 
       {/* CTA Footer Band */}
       <section className="bg-[#3b82f6] px-6 py-20 text-center">
