@@ -1,0 +1,31 @@
+# Cloud / production overrides. Use with:
+#   helm install dclaw-learn ./helm -n <ns> -f values-prod.yaml
+#
+# For a managed/cloud database, override secret.data.DATABASE_URL here. (The original
+# chart optionally provisioned a CloudNativePG cluster; that operator is not installed
+# on this cluster, so the dev default targets the shared postgres instead.)
+
+backend:
+  image:
+    repository: ghcr.io/dclawstack/dclaw-learn-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+
+frontend:
+  image:
+    repository: ghcr.io/dclawstack/dclaw-learn-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: learn.dclawstack.io
+  tls:
+    - secretName: dclaw-learn-tls
+      hosts:
+        - learn.dclawstack.io

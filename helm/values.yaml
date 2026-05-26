@@ -1,0 +1,74 @@
+# Default values = DEV / local cluster. Reproduces the live dclaw-core deployment.
+# Plain `helm install dclaw-learn ./helm -n dclaw-core` brings the app up.
+# For the cloud/GHCR deployment, override with: -f values-prod.yaml
+
+nameOverride: ""
+
+backend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: docker.io/library/dclaw-learn-backend
+    tag: local
+    pullPolicy: Never
+  containerPort: 8093
+  service:
+    type: ClusterIP
+    port: 8093
+  env: {}
+  livenessProbe:
+    path: /health
+    initialDelaySeconds: 15
+    periodSeconds: 30
+  readinessProbe:
+    path: /health
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+frontend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: docker.io/library/dclaw-learn-frontend
+    tag: local
+    pullPolicy: Never
+  containerPort: 3046
+  service:
+    type: NodePort
+    port: 3046
+    nodePort: 30046
+  env:
+    PORT: "3046"
+    BACKEND_URL: http://dclaw-learn-backend:8093
+  readinessProbe:
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+secret:
+  name: ""
+  data:
+    DATABASE_URL: postgresql+asyncpg://postgres:postgres@dclaw-shared-postgres:5432/dclaw_learn
+    APP_ENV: production
+    JWT_SECRET: dclaw-learn-local-jwt-secret-change-in-real-prod
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  host: ""
+  tls: []
