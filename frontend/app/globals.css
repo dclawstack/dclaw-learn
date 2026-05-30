@@ -22,3 +22,15 @@ body {
   background-color: var(--bg);
   color: var(--text);
 }
+
+@keyframes dclaw-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+  50% { transform: translateY(-12px) rotate(1deg); opacity: 1; }
+}
+.animate-float { animation: dclaw-float 4s ease-in-out infinite; }
+
+@keyframes dclaw-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll { animation: dclaw-scroll 30s linear infinite; }
